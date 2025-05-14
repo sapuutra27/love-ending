@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Farewell</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+    }
+    .wrapper {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    #text {
+      font-size: 17px;
+      max-width: 700px;
+      padding: 0 20px;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+    .show {
+      opacity: 1 !important;
+    }
+    #formPesan {
+      height: 100vh;
+      justify-content: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 2s ease forwards;
+      margin-top: 40px;
+    }
+    input, textarea, button {
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 400px;
+    }
+    button {
+      background-color: #000;
+      color: white;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgm" autoplay loop>
+    <source src="bgending.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
+  <div id="startScreen" style="height: 100vh; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    
+    <p style="margin-bottom: 10px;">Hai kamu, siapa namamu?</p>
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
+      <input type="text" id="inputNama" placeholder="Masukkan nama kamu..." style="width: 200px; padding: 10px; border-radius: 8px; border: none;">
+      <button onclick="startPage()" style="padding: 10px 16px; background-color: black; color: white; border-radius: 8px; border: none;">Mulai</button>
+    </div>
+    
+  </div>
+
+  <div class="wrapper">
+    <div id="text"></div>
+  </div>
+
+  <div id="formPesan">
+    <h3>Kirim Pesan Balik</h3>
+    <input type="text" id="nama" placeholder="Nama kamu">
+    <textarea id="pesan" rows="4" placeholder="Tulis pesanmu di sini..."></textarea>
+    <button onclick="kirimPesan()">Kirim</button>
+    <div id="status"></div>
+  </div>
+
+  <script>
+    const textEl = document.getElementById('text');
+    const formPesan = document.getElementById('formPesan');
+    let i = 0;
+    let namaPengunjung = "";
+
+    const texts = [
+      () => `Halo ${namaPengunjung}...`,
+      "Kalau kamu sampai di sini...",
+      "Itu artinya kamu sudah baca semua yang ingin aku sampaikan.",
+      "Terima kasih ya, udah meluangkan waktumu.",
+      "Mungkin tidak semua terasa sempurna, tapi semua aku tulis dari hati.",
+      "Kamu gak harus balas semuanya, cukup tahu kamu membaca ini saja udah bikin aku senang.",
+      "Karena yang tulus gak selalu harus dimiliki.",
+      "Cinta itu bukan soal bersama selamanya, tapi soal menghargai setiap momen yang ada.",
+      "Jadi, terima kasih udah jadi bagian dari ceritaku...",
+      "Sekarang giliran kamu, kirim sesuatu untukku ya."
+    ];
+
+    function startPage() {
+      const input = document.getElementById('inputNama');
+      namaPengunjung = input.value.trim() || "Kamu";
+
+      document.getElementById('startScreen').style.display = 'none';
+      document.querySelector('.wrapper').style.display = 'flex';
+
+      const bgm = document.getElementById("bgm");
+      if (bgm) {
+        bgm.play().catch(err => console.log("Autoplay diblokir:", err));
+      }
+
+      showNext();
+    }
+
+    function showNext() {
+      textEl.classList.remove("show");
+
+      setTimeout(() => {
+        const currentText = typeof texts[i] === 'function' ? texts[i]() : texts[i];
+        textEl.textContent = currentText;
+        textEl.classList.add("show");
+
+        i++;
+        if (i < texts.length) {
+          setTimeout(showNext, 4500);
+        } else {
+          setTimeout(() => {
+            document.querySelector('.wrapper').style.display = 'none';
+            formPesan.style.display = 'flex';
+          }, 3000);
+        }
+      }, 1000);
+    }
+
+    function kirimPesan() {
+      const nama = document.getElementById('nama').value.trim();
+      const pesan = document.getElementById('pesan').value.trim();
+      const status = document.getElementById('status');
+
+      if (!nama || !pesan) {
+        status.style.color = 'red';
+        status.innerText = "Tolong isi nama dan pesan.";
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbwGOnPf_YmkJffi7Qm1Wcbt5eRssEaMW6rX3hz_i_A7z7C_e9qv3QMefHDpE3Gd5ZPF/exec", {
+        method: "POST",
+        body: JSON.stringify({ nama, pesan }),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => res.text())
+      .then(result => {
+        status.style.color = '#0f0';
+        status.innerText = "Pesan berhasil dikirim. Makasih ya!";
+        document.getElementById('nama').value = '';
+        document.getElementById('pesan').value = '';
+      })
+      .catch(err => {
+        status.style.color = 'red';
+        status.innerText = "Gagal mengirim pesan. Coba lagi ya.";
+      });
+    }
+  </script>
+</body>
+</html>

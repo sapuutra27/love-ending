@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kirim Feedback</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 90%;
+      max-width: 400px;
+    }
+    input, textarea, select, button {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1em;
+    }
+    button {
+      background-color: white;
+      color: black;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Kirim Feedback</h2>
+  <form action="https://formsubmit.co/putrrchoco@gmail.com" method="POST">
+    <input type="text" name="Nama" placeholder="Nama kamu..." required>
+    <textarea name="Pesan" rows="4" placeholder="Pesan khusus..." required></textarea>
+    <select name="Rating" required>
+      <option disabled selected>Rating</option>
+      <option>★★★★★</option>
+      <option>★★★★☆</option>
+      <option>★★★☆☆</option>
+      <option>★★☆☆☆</option>
+      <option>★☆☆☆☆</option>
+    </select>
+    <input type="hidden" name="Waktu" value="2025-05-14 05:36:17">
+    <input type="hidden" name="_subject" value="Feedback Baru dari Website">
+    <input type="hidden" name="_template" value="box">
+    <input type="hidden" name="_next" value="https://sapuutra27.github.io/love-ending/thanks.html">
+    <button type="submit">Kirim</button>
+  </form>
+</body>
+</html>

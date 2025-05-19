@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>dari hati ke hati</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+    }
+    .wrapper {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    #text {
+      font-size: 17px;
+      max-width: 700px;
+      padding: 0 20px;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+    .show {
+      opacity: 1 !important;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgm" autoplay loop>
+    <source src="bgending.mp3" type="audio/mpeg">
+    browser kamu tidak mendukung audio.
+  </audio>
+
+  <div id="startScreen" style="height: 100vh; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <p style="margin-bottom: 10px;">hai kamu, siapa namamu?</p>
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
+      <input type="text" id="inputNama" placeholder="masukkan nama kamu..." style="width: 200px; padding: 10px; border-radius: 8px; border: none;">
+      <button onclick="startPage()" style="padding: 10px 16px; background-color: black; color: white; border-radius: 8px; border: none;">mulai</button>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div id="text"></div>
+  </div>
+
+  <script>
+    const textEl = document.getElementById('text');
+    let i = 0;
+    let namaPengunjung = "";
+
+    const texts = [
+      () => `halo ${namaPengunjung}...`,
+      "kalau kamu sampai di sini...",
+      "itu artinya kamu sudah baca semua yang ingin aku sampaikan.",
+      "terima kasih ya, udah meluangkan waktumu.",
+      "mungkin tidak semua terasa sempurna, tapi semua aku tulis dari hati.",
+      "kamu gak harus balas semuanya, cukup tahu kamu membaca ini saja udah bikin aku senang.",
+      "karena yang tulus gak selalu harus dimiliki.",
+      "cinta itu bukan soal bersama selamanya, tapi soal menghargai setiap momen yang ada.",
+      "pernahkah kau merasa, ketika kau diam dan tersudut?",
+      "saat dunia terasa hitam dan putih...",
+      "tak ada pelangi, hanya kelabu yang menemani hari.",
+      "tapi yakinlah, segala luka bukan akhir cerita.",
+      "aku tahu kamu kuat, bahkan saat kamu tak merasa begitu.",
+      "jangan biarkan dirimu padam oleh gelap yang sementara.",
+      "karna dalam diri kamu, ada cahaya yang lebih terang dari malam manapun.",
+      "lagu ini bukan hanya melodi, tapi pengingat bahwa kamu tak sendiri.",
+      "semua ini aku tulis, bukan untuk membuatmu kembali...",
+      "tapi untuk bilang bahwa kamu pernah berarti.",
+      "jadi, meskipun kita tak lagi bicara...",
+      "aku ingin kamu tahu, aku menghargai semua yang pernah ada.",
+      "terima kasih telah menjadi bagian dari hari-hariku yang hitam putih.",
+      "aku menyukai hal-hal kecil darimu...",
+      "jujur saja, aku membohongi diriku sendiri.",
+      "ternyata aku kalah dengan perasaanku.",
+      "kamu pemenangnya :)",
+      "oh iya...",
+      "aku cuma mau bilang...",
+      "kalau semisal nanti aku mengajakmu jalan, apa kamu mau?",
+      "jika iya...",
+      "kelak di hari itu saat aku chat...",
+      "jangan lupa aku yaa...",
+      "masih inget kan yang aku omongin...",
+      "i will always be there for you."
+    ];
+
+    function startPage() {
+      const input = document.getElementById('inputNama');
+      namaPengunjung = input.value.trim() || "kamu";
+
+      document.getElementById('startScreen').style.display = 'none';
+      document.querySelector('.wrapper').style.display = 'flex';
+
+      const bgm = document.getElementById("bgm");
+      if (bgm) {
+        bgm.play().catch(err => console.log("autoplay diblokir:", err));
+      }
+
+      showNext();
+    }
+
+    function showNext() {
+      textEl.classList.remove("show");
+      setTimeout(() => {
+        const currentText = typeof texts[i] === 'function' ? texts[i]() : texts[i];
+        textEl.textContent = currentText;
+        textEl.classList.add("show");
+        i++;
+        if (i < texts.length) {
+          setTimeout(showNext, 4500);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
